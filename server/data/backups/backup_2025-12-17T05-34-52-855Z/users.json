@@ -1,0 +1,29 @@
+[
+  {
+    "id": "user_admin",
+    "username": "admin",
+    "password": "admin",
+    "fullName": "系统管理员",
+    "role": "admin",
+    "department": null,
+    "createdAt": "2025-12-16T03:46:30.949Z"
+  },
+  {
+    "id": "user_1765869039586",
+    "username": "manager1",
+    "password": "123456",
+    "fullName": "张经理",
+    "role": "manager",
+    "department": "design",
+    "createdAt": "2025-12-16T07:10:39.586Z"
+  },
+  {
+    "id": "user_1765869142328",
+    "username": "worker1",
+    "password": "123456",
+    "fullName": "李员工",
+    "role": "employee",
+    "department": "assembly",
+    "createdAt": "2025-12-16T07:12:22.328Z"
+  }
+]

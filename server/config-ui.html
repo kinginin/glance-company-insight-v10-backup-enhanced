@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>公司管理系统 - 服务器配置</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Microsoft YaHei', 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      width: 100%;
+      max-width: 900px;
+      overflow: hidden;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+    
+    .header h1 {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+    
+    .header p {
+      opacity: 0.9;
+      font-size: 14px;
+    }
+    
+    .tabs {
+      display: flex;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .tab {
+      flex: 1;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+      font-weight: 500;
+      color: #666;
+      transition: all 0.3s;
+      border-bottom: 3px solid transparent;
+    }
+    
+    .tab:hover {
+      color: #667eea;
+      background: #f8f9fa;
+    }
+    
+    .tab.active {
+      color: #667eea;
+      border-bottom-color: #667eea;
+    }
+    
+    .tab-content {
+      display: none;
+      padding: 30px;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .section {
+      margin-bottom: 25px;
+    }
+    
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #f0f0f0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .section-title::before {
+      content: '';
+      width: 4px;
+      height: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 2px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #555;
+      font-weight: 500;
+      font-size: 14px;
+    }
+    
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: all 0.3s;
+      background: #fafafa;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #667eea;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    
+    .form-row-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 15px;
+    }
+    
+    .hint {
+      color: #888;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+    
+    .status-bar {
+      background: #f8f9fa;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .status-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ccc;
+    }
+    
+    .status-indicator.running {
+      background: #22c55e;
+      animation: pulse 2s infinite;
+    }
+    
+    .status-indicator.stopped {
+      background: #ef4444;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    .buttons {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+    }
+    
+    button {
+      flex: 1;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(102,126,234,0.4);
+    }
+    
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #333;
+    }
+    
+    .btn-secondary:hover {
+      background: #e0e0e0;
+    }
+    
+    .btn-success {
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      color: white;
+    }
+    
+    .btn-success:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(34,197,94,0.4);
+    }
+    
+    .btn-danger {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(239,68,68,0.4);
+    }
+    
+    .btn-small {
+      flex: none;
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+    
+    .info-box {
+      background: #e0f2fe;
+      border: 1px solid #7dd3fc;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 20px;
+    }
+    
+    .info-box h4 {
+      color: #0369a1;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    
+    .info-box p {
+      color: #0c4a6e;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    
+    .info-box code {
+      background: rgba(0,0,0,0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Consolas', monospace;
+    }
+    
+    .user-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .user-table th,
+    .user-table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .user-table th {
+      background: #f8f9fa;
+      font-weight: 600;
+      color: #333;
+      font-size: 14px;
+    }
+    
+    .user-table tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .user-table tr:hover td {
+      background: #f8f9fa;
+    }
+    
+    .user-table td {
+      font-size: 14px;
+      color: #555;
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    
+    .badge-admin { background: #fee2e2; color: #dc2626; }
+    .badge-leader { background: #fef3c7; color: #d97706; }
+    .badge-manager { background: #dbeafe; color: #2563eb; }
+    .badge-deputy { background: #e0e7ff; color: #4f46e5; }
+    .badge-employee { background: #f3f4f6; color: #6b7280; }
+    
+    .dept-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 8px;
+      font-size: 11px;
+      background: #ecfdf5;
+      color: #059669;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    
+    .stat-card {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+    }
+    
+    .stat-card .number {
+      font-size: 28px;
+      font-weight: 700;
+      color: #333;
+    }
+    
+    .stat-card .label {
+      font-size: 12px;
+      color: #666;
+      margin-top: 5px;
+    }
+    
+    .stat-card.admin .number { color: #dc2626; }
+    .stat-card.leader .number { color: #d97706; }
+    .stat-card.manager .number { color: #2563eb; }
+    .stat-card.employee .number { color: #059669; }
+    
+    .footer {
+      background: #f8f9fa;
+      padding: 20px 30px;
+      text-align: center;
+      color: #666;
+      font-size: 13px;
+      border-top: 1px solid #e0e0e0;
+    }
+    
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #333;
+      color: white;
+      padding: 15px 25px;
+      border-radius: 8px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+      transform: translateX(120%);
+      transition: transform 0.3s;
+      z-index: 1000;
+    }
+    
+    .toast.show {
+      transform: translateX(0);
+    }
+    
+    .toast.success {
+      background: #22c55e;
+    }
+    
+    .toast.error {
+      background: #ef4444;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: #888;
+    }
+    
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .filter-bar select {
+      padding: 8px 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 13px;
+      background: white;
+    }
+    
+    .filter-bar select:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    @media (max-width: 768px) {
+      .form-row, .form-row-3 {
+        grid-template-columns: 1fr;
+      }
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .user-table {
+        font-size: 12px;
+      }
+      .user-table th, .user-table td {
+        padding: 8px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🏢 公司管理系统</h1>
+      <p>服务器配置与用户管理</p>
+    </div>
+    
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('server')">⚙️ 服务器设置</div>
+      <div class="tab" onclick="switchTab('users')">👥 账号管理</div>
+      <div class="tab" onclick="switchTab('managers')">👔 注册账号</div>
+      <div class="tab" onclick="switchTab('backup')">💾 数据备份</div>
+    </div>
+    
+    <!-- 服务器设置 -->
+    <div class="tab-content active" id="tab-server">
+      <div class="status-bar">
+        <div class="status-indicator" id="statusIndicator"></div>
+        <span id="statusText">检测服务器状态...</span>
+      </div>
+      
+      <div class="section">
+        <div class="section-title">服务器设置</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>监听端口</label>
+            <input type="number" id="port" value="3000" min="1" max="65535">
+            <p class="hint">默认端口 3000</p>
+          </div>
+          <div class="form-group">
+            <label>监听地址</label>
+            <select id="host">
+              <option value="0.0.0.0">所有网络接口 (0.0.0.0)</option>
+              <option value="127.0.0.1">仅本机 (127.0.0.1)</option>
+            </select>
+            <p class="hint">选择"所有网络接口"允许局域网访问</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="section">
+        <div class="section-title">安全设置</div>
+        <div class="form-group">
+          <label>注册邀请码</label>
+          <input type="text" id="inviteCode" value="admin" placeholder="新用户注册时需要的邀请码">
+          <p class="hint">新用户注册时必须输入此邀请码才能创建账号（修改后需重启服务器生效）</p>
+        </div>
+      </div>
+      
+      <div class="section">
+        <div class="section-title">应用信息</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>系统名称</label>
+            <input type="text" id="appTitle" value="公司管理系统">
+          </div>
+          <div class="form-group">
+            <label>版本号</label>
+            <input type="text" id="appVersion" value="3.0.0" readonly>
+          </div>
+        </div>
+      </div>
+      
+      <div class="buttons">
+        <button class="btn-secondary" onclick="loadConfig()">
+          🔄 重新加载
+        </button>
+        <button class="btn-primary" onclick="saveConfig()">
+          💾 保存配置
+        </button>
+      </div>
+      
+      <div class="info-box">
+        <h4>💡 使用说明</h4>
+        <p>
+          1. 修改配置后点击"保存配置"<br>
+          2. 重启服务器使配置生效<br>
+          3. 客户端通过 <code>http://服务器IP:端口</code> 访问<br>
+          4. 邀请码修改后，前端注册页面将使用新的邀请码
+        </p>
+      </div>
+    </div>
+    
+    <!-- 账号管理 -->
+    <div class="tab-content" id="tab-users">
+      <div class="stats-grid">
+        <div class="stat-card admin">
+          <div class="number" id="adminCount">0</div>
+          <div class="label">管理员</div>
+        </div>
+        <div class="stat-card leader">
+          <div class="number" id="leaderCount">0</div>
+          <div class="label">领导</div>
+        </div>
+        <div class="stat-card manager">
+          <div class="number" id="managerCount">0</div>
+          <div class="label">经理/副经理</div>
+        </div>
+        <div class="stat-card employee">
+          <div class="number" id="employeeCount">0</div>
+          <div class="label">普通员工</div>
+        </div>
+      </div>
+      
+      <div class="section">
+        <div class="section-title">所有账号列表</div>
+        
+        <div class="filter-bar">
+          <select id="filterRole" onchange="filterUsers()">
+            <option value="">全部角色</option>
+            <option value="admin">管理员</option>
+            <option value="leader">领导</option>
+            <option value="manager">部门经理</option>
+            <option value="deputy_manager">副经理</option>
+            <option value="employee">普通员工</option>
+          </select>
+          <select id="filterDept" onchange="filterUsers()">
+            <option value="">全部部门</option>
+            <option value="design">设计部</option>
+            <option value="procurement">采购部</option>
+            <option value="production">生产部</option>
+            <option value="assembly">装调部</option>
+            <option value="electrical">电气部</option>
+            <option value="quality">质量部</option>
+          </select>
+        </div>
+        
+        <div id="userTableContainer">
+          <table class="user-table">
+            <thead>
+              <tr>
+                <th>用户名</th>
+                <th>姓名</th>
+                <th>角色</th>
+                <th>部门</th>
+                <th>注册时间</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="userTableBody">
+              <tr><td colspan="6" class="empty-state">加载中...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div class="buttons">
+        <button class="btn-secondary" onclick="loadUsers()">
+          🔄 刷新列表
+        </button>
+      </div>
+    </div>
+    
+    <!-- 注册账号 -->
+    <div class="tab-content" id="tab-managers">
+      <div class="section">
+        <div class="section-title">注册领导账号</div>
+        <p class="hint" style="margin-bottom: 15px;">领导账号拥有与管理员相同的权限（除特定权限外），可以访问所有部门</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label>用户名</label>
+            <input type="text" id="leaderUsername" placeholder="输入用户名">
+          </div>
+          <div class="form-group">
+            <label>密码</label>
+            <input type="password" id="leaderPassword" placeholder="输入密码">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>姓名</label>
+          <input type="text" id="leaderFullName" placeholder="输入真实姓名">
+        </div>
+        <button class="btn-success btn-small" onclick="registerLeader()" style="width: auto;">
+          ➕ 注册领导账号
+        </button>
+      </div>
+      
+      <div class="section">
+        <div class="section-title">注册部门经理</div>
+        <p class="hint" style="margin-bottom: 15px;">部门经理只能管理和查看本部门的项目和员工</p>
+        <div class="form-row-3">
+          <div class="form-group">
+            <label>用户名</label>
+            <input type="text" id="managerUsername" placeholder="输入用户名">
+          </div>
+          <div class="form-group">
+            <label>密码</label>
+            <input type="password" id="managerPassword" placeholder="输入密码">
+          </div>
+          <div class="form-group">
+            <label>姓名</label>
+            <input type="text" id="managerFullName" placeholder="输入真实姓名">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>所属部门</label>
+            <select id="managerDepartment">
+              <option value="design">设计部</option>
+              <option value="procurement">采购部</option>
+              <option value="production">生产部</option>
+              <option value="assembly">装调部</option>
+              <option value="electrical">电气部</option>
+              <option value="quality">质量部</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>职位</label>
+            <select id="managerRole">
+              <option value="manager">部门经理</option>
+              <option value="deputy_manager">副经理</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn-success btn-small" onclick="registerManager()" style="width: auto;">
+          ➕ 注册部门经理
+        </button>
+      </div>
+      
+      <div class="section">
+        <div class="section-title">注册普通员工</div>
+        <p class="hint" style="margin-bottom: 15px;">普通员工只能查看和处理分配给自己的任务</p>
+        <div class="form-row-3">
+          <div class="form-group">
+            <label>用户名</label>
+            <input type="text" id="employeeUsername" placeholder="输入用户名">
+          </div>
+          <div class="form-group">
+            <label>密码</label>
+            <input type="password" id="employeePassword" placeholder="输入密码">
+          </div>
+          <div class="form-group">
+            <label>姓名</label>
+            <input type="text" id="employeeFullName" placeholder="输入真实姓名">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>所属部门</label>
+          <select id="employeeDepartment">
+            <option value="design">设计部</option>
+            <option value="procurement">采购部</option>
+            <option value="production">生产部</option>
+            <option value="assembly">装调部</option>
+            <option value="electrical">电气部</option>
+            <option value="quality">质量部</option>
+          </select>
+        </div>
+        <button class="btn-success btn-small" onclick="registerEmployee()" style="width: auto;">
+          ➕ 注册员工账号
+        </button>
+      </div>
+      
+      <div class="info-box">
+        <h4>📋 权限说明</h4>
+        <p>
+          <strong>管理员</strong>：最高权限，可创建项目、管理所有用户<br>
+          <strong>领导</strong>：与管理员相同权限（除创建项目外），可查看所有部门<br>
+          <strong>部门经理/副经理</strong>：管理本部门项目分配，只能查看本部门信息<br>
+          <strong>普通员工</strong>：只能查看和处理分配给自己的任务
+        </p>
+      </div>
+    </div>
+    
+    <!-- 数据备份 -->
+    <div class="tab-content" id="tab-backup">
+      <div class="stats-grid">
+        <div class="stat-card admin">
+          <div class="number" id="dataUsers">0</div>
+          <div class="label">用户数</div>
+        </div>
+        <div class="stat-card leader">
+          <div class="number" id="dataProjects">0</div>
+          <div class="label">项目数</div>
+        </div>
+        <div class="stat-card manager">
+          <div class="number" id="dataProcesses">0</div>
+          <div class="label">工序数</div>
+        </div>
+        <div class="stat-card employee">
+          <div class="number" id="dataBackups">0</div>
+          <div class="label">备份数</div>
+        </div>
+      </div>
+      
+      <div class="section">
+        <div class="section-title">自动备份</div>
+        <p class="hint" style="margin-bottom: 15px;">开启后每20分钟自动备份一次，会覆盖前一次的自动备份（包含服务器配置和管理系统数据）</p>
+        <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 15px;">
+          <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+            <input type="checkbox" id="autoBackupToggle" onchange="toggleAutoBackup()" style="width: 18px; height: 18px; cursor: pointer;">
+            <span style="font-weight: 500;">启用自动备份</span>
+          </label>
+          <span id="autoBackupStatus" style="color: #888; font-size: 13px;">未启用</span>
+        </div>
+        <div id="autoBackupInfo" style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 12px; display: none;">
+          <div style="display: flex; align-items: center; gap: 8px; color: #166534;">
+            <span>✅</span>
+            <span>上次自动备份时间：<strong id="lastAutoBackupTime">-</strong></span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="section">
+        <div class="section-title">手动备份</div>
+        <p class="hint" style="margin-bottom: 15px;">点击下方按钮创建当前数据的备份，备份文件保存在 server/data/backups 目录</p>
+        <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 15px;">
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" id="includeConfigCheckbox" style="width: 16px; height: 16px; cursor: pointer;">
+            <span style="font-size: 14px;">同时备份服务器配置</span>
+          </label>
+        </div>
+        <button class="btn-success" onclick="createBackup()" style="width: auto;">
+          📦 立即创建备份
+        </button>
+      </div>
+      
+      <div class="section">
+        <div class="section-title">备份列表</div>
+        <div id="backupListContainer">
+          <table class="user-table">
+            <thead>
+              <tr>
+                <th>备份名称</th>
+                <th>类型</th>
+                <th>创建时间</th>
+                <th>包含文件</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="backupTableBody">
+              <tr><td colspan="5" class="empty-state">加载中...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div class="buttons">
+        <button class="btn-secondary" onclick="loadBackups()">
+          🔄 刷新列表
+        </button>
+      </div>
+      
+      <div class="info-box">
+        <h4>💡 备份说明</h4>
+        <p>
+          <strong>备份内容</strong>：用户数据、项目数据、工序数据、日报数据、服务器配置<br>
+          <strong>备份位置</strong>：server/data/backups/ 目录<br>
+          <strong>自动备份</strong>：每20分钟自动备份一次，覆盖前一次自动备份<br>
+          <strong>恢复操作</strong>：恢复前会自动创建当前数据的备份<br>
+          <strong>建议</strong>：定期手动备份重要数据，防止数据丢失
+        </p>
+      </div>
+    </div>
+    
+    <div class="footer">
+      公司管理系统 v3.0.0 | 服务器配置与用户管理
+    </div>
+  </div>
+  
+  <div class="toast" id="toast"></div>
+  
+  <script>
+    // 用户数据缓存
+    let allUsers = [];
+    
+    // 切换标签页
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      
+      const tabIndex = { server: 1, users: 2, managers: 3, backup: 4 };
+      document.querySelector(`.tab:nth-child(${tabIndex[tabName]})`).classList.add('active');
+      document.getElementById('tab-' + tabName).classList.add('active');
+      
+      if (tabName === 'users') {
+        loadUsers();
+      }
+      if (tabName === 'backup') {
+        loadBackups();
+        loadDataStats();
+      }
+    }
+    
+    // 显示提示消息
+    function showToast(message, type = 'info') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = 'toast show ' + type;
+      setTimeout(() => {
+        toast.className = 'toast';
+      }, 3000);
+    }
+    
+    // 加载配置
+    async function loadConfig() {
+      try {
+        const response = await fetch('/api/config');
+        const data = await response.json();
+        
+        if (data.server) {
+          document.getElementById('port').value = data.server.port || 3000;
+          document.getElementById('host').value = data.server.host || '0.0.0.0';
+        }
+        if (data.app) {
+          document.getElementById('appTitle').value = data.app.title || '公司管理系统';
+          document.getElementById('appVersion').value = data.app.version || '3.0.0';
+        }
+        if (data.inviteCode) {
+          document.getElementById('inviteCode').value = data.inviteCode;
+        }
+        
+        showToast('配置已加载', 'success');
+      } catch (e) {
+        showToast('加载配置失败', 'error');
+      }
+    }
+    
+    // 保存配置
+    async function saveConfig() {
+      const config = {
+        server: {
+          port: parseInt(document.getElementById('port').value),
+          host: document.getElementById('host').value
+        },
+        app: {
+          title: document.getElementById('appTitle').value,
+          version: document.getElementById('appVersion').value
+        },
+        security: {
+          inviteCode: document.getElementById('inviteCode').value
+        },
+        database: {
+          type: 'file',
+          dataDir: './data'
+        }
+      };
+      
+      try {
+        const response = await fetch('/api/save-config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(config)
+        });
+        
+        if (response.ok) {
+          showToast('配置已保存，请重启服务器生效', 'success');
+        } else {
+          showToast('保存失败', 'error');
+        }
+      } catch (e) {
+        showToast('保存失败: ' + e.message, 'error');
+      }
+    }
+    
+    // 角色和部门名称映射
+    const roleNames = {
+      'admin': '管理员',
+      'leader': '领导',
+      'manager': '部门经理',
+      'deputy_manager': '副经理',
+      'employee': '员工'
+    };
+    
+    const roleBadges = {
+      'admin': 'badge-admin',
+      'leader': 'badge-leader',
+      'manager': 'badge-manager',
+      'deputy_manager': 'badge-deputy',
+      'employee': 'badge-employee'
+    };
+    
+    const deptNames = {
+      'admin': '系统',
+      'leader': '领导层',
+      'design': '设计部',
+      'procurement': '采购部',
+      'production': '生产部',
+      'assembly': '装调部',
+      'electrical': '电气部',
+      'quality': '质量部'
+    };
+    
+    // 加载用户列表
+    async function loadUsers() {
+      const tbody = document.getElementById('userTableBody');
+      
+      try {
+        const response = await fetch('/api/users');
+        allUsers = await response.json();
+        
+        updateStats();
+        renderUsers(allUsers);
+        
+      } catch (e) {
+        tbody.innerHTML = '<tr><td colspan="6" class="empty-state">加载失败</td></tr>';
+      }
+    }
+    
+    // 更新统计数据
+    function updateStats() {
+      document.getElementById('adminCount').textContent = allUsers.filter(u => u.role === 'admin').length;
+      document.getElementById('leaderCount').textContent = allUsers.filter(u => u.role === 'leader').length;
+      document.getElementById('managerCount').textContent = allUsers.filter(u => u.role === 'manager' || u.role === 'deputy_manager').length;
+      document.getElementById('employeeCount').textContent = allUsers.filter(u => u.role === 'employee').length;
+    }
+    
+    // 筛选用户
+    function filterUsers() {
+      const roleFilter = document.getElementById('filterRole').value;
+      const deptFilter = document.getElementById('filterDept').value;
+      
+      let filtered = allUsers;
+      
+      if (roleFilter) {
+        filtered = filtered.filter(u => u.role === roleFilter);
+      }
+      
+      if (deptFilter) {
+        filtered = filtered.filter(u => u.department === deptFilter);
+      }
+      
+      renderUsers(filtered);
+    }
+    
+    // 渲染用户表格
+    function renderUsers(users) {
+      const tbody = document.getElementById('userTableBody');
+      
+      if (users.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="empty-state">暂无用户</td></tr>';
+        return;
+      }
+      
+      tbody.innerHTML = users.map(user => `
+        <tr>
+          <td><strong>${user.username}</strong></td>
+          <td>${user.fullName || '-'}</td>
+          <td><span class="badge ${roleBadges[user.role] || 'badge-employee'}">${roleNames[user.role] || user.role}</span></td>
+          <td>${user.department ? `<span class="dept-badge">${deptNames[user.department] || user.department}</span>` : '-'}</td>
+          <td>${user.createdAt ? new Date(user.createdAt).toLocaleDateString() : '-'}</td>
+          <td>
+            ${user.role !== 'admin' ? `<button class="btn-danger btn-small" onclick="deleteUser('${user.username}')">删除</button>` : '<span style="color:#999">-</span>'}
+          </td>
+        </tr>
+      `).join('');
+    }
+    
+    // 删除用户
+    async function deleteUser(username) {
+      if (!confirm(`确定要删除用户 "${username}" 吗？此操作不可恢复！`)) return;
+      
+      try {
+        const response = await fetch('/api/users/' + username, {
+          method: 'DELETE'
+        });
+        
+        if (response.ok) {
+          showToast('用户已删除', 'success');
+          loadUsers();
+        } else {
+          const data = await response.json();
+          showToast(data.error || '删除失败', 'error');
+        }
+      } catch (e) {
+        showToast('删除失败: ' + e.message, 'error');
+      }
+    }
+    
+    // 注册领导账号
+    async function registerLeader() {
+      const username = document.getElementById('leaderUsername').value.trim();
+      const password = document.getElementById('leaderPassword').value;
+      const fullName = document.getElementById('leaderFullName').value.trim();
+      
+      if (!username || !password || !fullName) {
+        showToast('请填写所有字段', 'error');
+        return;
+      }
+      
+      try {
+        const response = await fetch('/api/register-manager', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username,
+            password,
+            fullName,
+            role: 'leader',
+            department: 'leader'
+          })
+        });
+        
+        if (response.ok) {
+          showToast('领导账号注册成功', 'success');
+          document.getElementById('leaderUsername').value = '';
+          document.getElementById('leaderPassword').value = '';
+          document.getElementById('leaderFullName').value = '';
+        } else {
+          const data = await response.json();
+          showToast(data.error || '注册失败', 'error');
+        }
+      } catch (e) {
+        showToast('注册失败: ' + e.message, 'error');
+      }
+    }
+    
+    // 注册部门经理
+    async function registerManager() {
+      const username = document.getElementById('managerUsername').value.trim();
+      const password = document.getElementById('managerPassword').value;
+      const fullName = document.getElementById('managerFullName').value.trim();
+      const department = document.getElementById('managerDepartment').value;
+      const role = document.getElementById('managerRole').value;
+      
+      if (!username || !password || !fullName) {
+        showToast('请填写所有字段', 'error');
+        return;
+      }
+      
+      try {
+        const response = await fetch('/api/register-manager', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username,
+            password,
+            fullName,
+            role,
+            department
+          })
+        });
+        
+        if (response.ok) {
+          showToast('部门经理注册成功', 'success');
+          document.getElementById('managerUsername').value = '';
+          document.getElementById('managerPassword').value = '';
+          document.getElementById('managerFullName').value = '';
+        } else {
+          const data = await response.json();
+          showToast(data.error || '注册失败', 'error');
+        }
+      } catch (e) {
+        showToast('注册失败: ' + e.message, 'error');
+      }
+    }
+    
+    // 注册普通员工
+    async function registerEmployee() {
+      const username = document.getElementById('employeeUsername').value.trim();
+      const password = document.getElementById('employeePassword').value;
+      const fullName = document.getElementById('employeeFullName').value.trim();
+      const department = document.getElementById('employeeDepartment').value;
+      
+      if (!username || !password || !fullName) {
+        showToast('请填写所有字段', 'error');
+        return;
+      }
+      
+      try {
+        const response = await fetch('/api/register-manager', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username,
+            password,
+            fullName,
+            role: 'employee',
+            department
+          })
+        });
+        
+        if (response.ok) {
+          showToast('员工账号注册成功', 'success');
+          document.getElementById('employeeUsername').value = '';
+          document.getElementById('employeePassword').value = '';
+          document.getElementById('employeeFullName').value = '';
+        } else {
+          const data = await response.json();
+          showToast(data.error || '注册失败', 'error');
+        }
+      } catch (e) {
+        showToast('注册失败: ' + e.message, 'error');
+      }
+    }
+    
+    // 检查服务器状态
+    async function checkStatus() {
+      const indicator = document.getElementById('statusIndicator');
+      const text = document.getElementById('statusText');
+      
+      try {
+        const response = await fetch('/api/health');
+        const data = await response.json();
+        
+        if (data.status === 'ok') {
+          indicator.className = 'status-indicator running';
+          text.textContent = '服务器运行中 - 版本 ' + data.version;
+        }
+      } catch (e) {
+        indicator.className = 'status-indicator stopped';
+        text.textContent = '服务器未运行';
+      }
+    }
+    
+    // 自动备份定时器
+    let autoBackupInterval = null;
+    const AUTO_BACKUP_INTERVAL = 20 * 60 * 1000; // 20分钟
+    
+    // 创建手动备份
+    async function createBackup() {
+      try {
+        const includeConfig = document.getElementById('includeConfigCheckbox').checked;
+        const response = await fetch('/api/backup', { 
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ includeConfig })
+        });
+        const data = await response.json();
+        
+        if (data.success) {
+          showToast('备份创建成功: ' + data.backup.name, 'success');
+          loadBackups();
+          loadDataStats();
+        } else {
+          showToast(data.error || '备份失败', 'error');
+        }
+      } catch (e) {
+        showToast('备份失败: ' + e.message, 'error');
+      }
+    }
+    
+    // 创建自动备份
+    async function createAutoBackup() {
+      try {
+        const response = await fetch('/api/backup/auto', { method: 'POST' });
+        const data = await response.json();
+        
+        if (data.success) {
+          console.log('自动备份成功:', data.backup.timestamp);
+          updateAutoBackupInfo(data.backup);
+          loadBackups();
+          loadDataStats();
+        }
+      } catch (e) {
+        console.error('自动备份失败:', e.message);
+      }
+    }
+    
+    // 切换自动备份
+    function toggleAutoBackup() {
+      const toggle = document.getElementById('autoBackupToggle');
+      const statusText = document.getElementById('autoBackupStatus');
+      
+      if (toggle.checked) {
+        // 启用自动备份
+        createAutoBackup(); // 立即执行一次
+        autoBackupInterval = setInterval(createAutoBackup, AUTO_BACKUP_INTERVAL);
+        statusText.textContent = '已启用（每20分钟备份一次）';
+        statusText.style.color = '#22c55e';
+        localStorage.setItem('autoBackupEnabled', 'true');
+        showToast('自动备份已启用', 'success');
+      } else {
+        // 禁用自动备份
+        if (autoBackupInterval) {
+          clearInterval(autoBackupInterval);
+          autoBackupInterval = null;
+        }
+        statusText.textContent = '未启用';
+        statusText.style.color = '#888';
+        localStorage.setItem('autoBackupEnabled', 'false');
+        showToast('自动备份已禁用', 'info');
+      }
+    }
+    
+    // 更新自动备份信息显示
+    function updateAutoBackupInfo(backup) {
+      const infoDiv = document.getElementById('autoBackupInfo');
+      const timeSpan = document.getElementById('lastAutoBackupTime');
+      
+      if (backup && backup.timestamp) {
+        infoDiv.style.display = 'block';
+        timeSpan.textContent = new Date(backup.timestamp).toLocaleString();
+      } else {
+        infoDiv.style.display = 'none';
+      }
+    }
+    
+    // 加载自动备份状态
+    async function loadAutoBackupStatus() {
+      try {
+        const response = await fetch('/api/backup/auto/status');
+        const data = await response.json();
+        
+        if (data.exists) {
+          updateAutoBackupInfo(data.backup);
+        }
+        
+        // 恢复自动备份状态
+        const autoBackupEnabled = localStorage.getItem('autoBackupEnabled') === 'true';
+        const toggle = document.getElementById('autoBackupToggle');
+        const statusText = document.getElementById('autoBackupStatus');
+        
+        if (autoBackupEnabled) {
+          toggle.checked = true;
+          statusText.textContent = '已启用（每20分钟备份一次）';
+          statusText.style.color = '#22c55e';
+          autoBackupInterval = setInterval(createAutoBackup, AUTO_BACKUP_INTERVAL);
+        }
+      } catch (e) {
+        console.error('加载自动备份状态失败:', e);
+      }
+    }
+    
+    // 获取备份类型名称
+    function getBackupTypeName(type) {
+      const typeNames = {
+        'manual': '手动备份',
+        'auto': '自动备份',
+        'auto_before_restore': '恢复前自动备份'
+      };
+      return typeNames[type] || '手动备份';
+    }
+    
+    // 获取备份类型样式
+    function getBackupTypeBadge(type) {
+      const typeStyles = {
+        'manual': 'background: #dbeafe; color: #2563eb;',
+        'auto': 'background: #dcfce7; color: #16a34a;',
+        'auto_before_restore': 'background: #fef3c7; color: #d97706;'
+      };
+      return typeStyles[type] || typeStyles['manual'];
+    }
+    
+    // 加载备份列表
+    async function loadBackups() {
+      const tbody = document.getElementById('backupTableBody');
+      
+      try {
+        const response = await fetch('/api/backups');
+        const backups = await response.json();
+        
+        if (backups.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" class="empty-state">暂无备份</td></tr>';
+          return;
+        }
+        
+        tbody.innerHTML = backups.map(backup => `
+          <tr>
+            <td><strong>${backup.name}</strong></td>
+            <td><span class="badge" style="${getBackupTypeBadge(backup.type)}">${getBackupTypeName(backup.type)}</span></td>
+            <td>${new Date(backup.timestamp).toLocaleString()}</td>
+            <td>${backup.files ? backup.files.join(', ') : '-'}</td>
+            <td>
+              <button class="btn-success btn-small" onclick="restoreBackup('${backup.name}')"恢复</button>
+              <button class="btn-danger btn-small" onclick="deleteBackup('${backup.name}')"删除</button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty-state">加载失败</td></tr>';
+      }
+    }
+    
+    // 恢复备份
+    async function restoreBackup(backupName) {
+      if (!confirm(`确定要恢复备份 "${backupName}" 吗？\n\n注意：\n1. 恢复前会自动创建当前数据的备份\n2. 如果备份包含配置文件，配置也会被恢复\n3. 恢复后管理系统数据会自动同步`)) return;
+      
+      try {
+        const response = await fetch('/api/restore/' + encodeURIComponent(backupName), { method: 'POST' });
+        const data = await response.json();
+        
+        if (data.success) {
+          let msg = '数据已恢复，已自动备份原数据: ' + data.autoBackup;
+          if (data.restored.includes('config.json')) {
+            msg += '\n配置文件已恢复，建议重启服务器以应用新配置';
+          }
+          showToast(msg, 'success');
+          loadBackups();
+          loadDataStats();
+          loadConfig(); // 重新加载配置
+          
+          // 自动同步数据到管理系统
+          try {
+            const syncResponse = await fetch('/api/sync-data');
+            const syncData = await syncResponse.json();
+            
+            // 将数据存储到sessionStorage，管理系统页面加载时会读取
+            sessionStorage.setItem('pendingRestore', JSON.stringify({
+              projects: syncData.projects || [],
+              processes: syncData.processes || [],
+              dailyReports: syncData.dailyReports || [],
+              timestamp: Date.now()
+            }));
+            
+            // 弹出提示框提醒用户
+            const shouldOpen = confirm('数据已恢复！\n\n点击"确定"打开管理系统页面并自动同步数据，\n点击"取消"稍后手动刷新管理系统页面。');
+            
+            if (shouldOpen) {
+              // 打开管理系统页面，带上同步参数
+              window.open('/?restore=true&t=' + Date.now(), '_blank');
+            }
+          } catch (syncError) {
+            console.error('同步数据失败:', syncError);
+            alert('数据已恢复！\n\n请手动刷新管理系统页面以加载恢复的数据。');
+          }
+        } else {
+          showToast(data.error || '恢复失败', 'error');
+        }
+      } catch (e) {
+        showToast('恢复失败: ' + e.message, 'error');
+      }
+    }
+    
+    // 删除备份
+    async function deleteBackup(backupName) {
+      if (!confirm(`确定要删除备份 "${backupName}" 吗？\n\n此操作不可恢复！`)) return;
+      
+      try {
+        const response = await fetch('/api/backup/' + encodeURIComponent(backupName), { method: 'DELETE' });
+        const data = await response.json();
+        
+        if (data.success) {
+          showToast('备份已删除', 'success');
+          loadBackups();
+          loadDataStats();
+        } else {
+          showToast(data.error || '删除失败', 'error');
+        }
+      } catch (e) {
+        showToast('删除失败: ' + e.message, 'error');
+      }
+    }
+    
+    // 加载数据统计
+    async function loadDataStats() {
+      try {
+        const response = await fetch('/api/data-stats');
+        const stats = await response.json();
+        
+        document.getElementById('dataUsers').textContent = stats.users || 0;
+        document.getElementById('dataProjects').textContent = stats.projects || 0;
+        document.getElementById('dataProcesses').textContent = stats.processes || 0;
+        document.getElementById('dataBackups').textContent = stats.backups || 0;
+      } catch (e) {
+        console.error('加载统计失败:', e);
+      }
+    }
+    
+    // 初始化
+    window.onload = function() {
+      checkStatus();
+      loadConfig();
+      loadAutoBackupStatus();
+      setInterval(checkStatus, 5000);
+    };
+  </script>
+</body>
+</html>

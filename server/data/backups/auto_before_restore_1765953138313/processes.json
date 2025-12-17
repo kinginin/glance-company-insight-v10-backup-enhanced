@@ -1,0 +1,93 @@
+[
+  {
+    "id": "wp-p1765952716031-1",
+    "projectId": "p1765952716031",
+    "name": "设计",
+    "description": "进行产品设计和图纸设计",
+    "order": 1,
+    "plannedDays": 7,
+    "plannedStartDate": "2025-12-17",
+    "plannedEndDate": "2025-12-23",
+    "status": "waiting",
+    "department": "design",
+    "isShippingProcess": false
+  },
+  {
+    "id": "wp-p1765952716031-2",
+    "projectId": "p1765952716031",
+    "name": "采购",
+    "description": "采购所需材料和零部件",
+    "order": 2,
+    "plannedDays": 7,
+    "plannedStartDate": "2025-12-17",
+    "plannedEndDate": "2025-12-23",
+    "status": "waiting",
+    "department": "procurement",
+    "isShippingProcess": false
+  },
+  {
+    "id": "wp-p1765952716031-3",
+    "projectId": "p1765952716031",
+    "name": "生产",
+    "description": "进行零部件加工和初步组装",
+    "order": 3,
+    "plannedDays": 7,
+    "plannedStartDate": "2025-12-17",
+    "plannedEndDate": "2025-12-23",
+    "status": "waiting",
+    "department": "production",
+    "isShippingProcess": false
+  },
+  {
+    "id": "wp-p1765952716031-4",
+    "projectId": "p1765952716031",
+    "name": "装配",
+    "description": "完成产品组装工作",
+    "order": 4,
+    "plannedDays": 7,
+    "plannedStartDate": "2025-12-17",
+    "plannedEndDate": "2025-12-23",
+    "status": "waiting",
+    "department": "assembly",
+    "isShippingProcess": false
+  },
+  {
+    "id": "wp-p1765952716031-5",
+    "projectId": "p1765952716031",
+    "name": "电气",
+    "description": "进行电气系统调试",
+    "order": 5,
+    "plannedDays": 7,
+    "plannedStartDate": "2025-12-17",
+    "plannedEndDate": "2025-12-23",
+    "status": "waiting",
+    "department": "electrical",
+    "isShippingProcess": false
+  },
+  {
+    "id": "wp-p1765952716031-6",
+    "projectId": "p1765952716031",
+    "name": "检验",
+    "description": "进行质量检验和测试",
+    "order": 6,
+    "plannedDays": 7,
+    "plannedStartDate": "2025-12-17",
+    "plannedEndDate": "2025-12-23",
+    "status": "waiting",
+    "department": "quality",
+    "isShippingProcess": false
+  },
+  {
+    "id": "wp-p1765952716031-7",
+    "projectId": "p1765952716031",
+    "name": "发货",
+    "description": "产品包装和发货准备",
+    "order": 7,
+    "plannedDays": 7,
+    "plannedStartDate": "2025-12-17",
+    "plannedEndDate": "2025-12-23",
+    "status": "pending",
+    "department": "assembly",
+    "isShippingProcess": true
+  }
+]

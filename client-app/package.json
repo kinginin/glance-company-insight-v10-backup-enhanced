@@ -1,0 +1,80 @@
+{
+  "name": "company-management-client",
+  "version": "2.0.0",
+  "description": "公司管理系统 - 桌面客户端",
+  "main": "main.js",
+  "author": "Your Company",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win --x64",
+    "build:win32": "electron-builder --win --ia32",
+    "build:portable": "electron-builder --win portable",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux"
+  },
+  "dependencies": {
+    "electron-store": "^8.1.0"
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "appId": "com.company.management.client",
+    "productName": "公司管理系统",
+    "copyright": "Copyright © 2024",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "icon.png",
+      "icon.ico"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "icon.ico",
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "icon.ico",
+      "uninstallerIcon": "icon.ico",
+      "installerHeaderIcon": "icon.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "公司管理系统",
+      "runAfterFinish": true,
+      "installerLanguages": ["zh_CN", "en_US"],
+      "language": "2052"
+    },
+    "portable": {
+      "artifactName": "${productName}-便携版-${version}.${ext}"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "icon.icns",
+      "category": "public.app-category.business"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "icon.png",
+      "category": "Office"
+    }
+  }
+}
